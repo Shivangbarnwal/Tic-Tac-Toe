@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-color: white;
+            color: black;
+
+        }
+        header{
+            background-color: rgb(43, 42, 42);
+            height: 17%;
+            margin-bottom: 15px;
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        main{
+            display: flex;
+            
+        }
+        .contents{
+            width: 20vw;
+            background-color: rgb(211, 211, 211);
+            height: 100vh;
+            margin-left: 15px;
+            padding: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        a{
+            text-decoration: none;
+        }
+        .heading{
+            font-size:50px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container{
+            display: flex;
+            min-height: 80vh;
+            width: 90vw;
+            flex-wrap: wrap;
+            overflow-y: scroll;
+        }
+        .card{
+            height: 400px;
+            width: 258px;
+            background-color: rgb(211, 211, 211);
+            margin: 20px;
+            border-radius: 10px;
+        }
+
+        
+        .custom{
+            height: 220px;
+            width: 220px;
+            margin: 19px;
+            border-radius: 10px;
+        }
+        footer{
+            height: 20vh;
+            background-color:brown;
+        }
+        .card h2{
+            text-align: center;
+            color: black;
+            text-decoration: none;
+        }
+        .poppins{
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            font-style:normal;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="heading poppins">Tic - Tac - Toe</h1>
+    </header>
+    <main>
+        <div class="contents">
+            <a href=""><div>Home</div></a>
+            <a href=""><div>About</div></a>
+            <a href=""><div>Feedback</div></a>
+            
+            
+        </div>
+        <div class="container">
+            <div class="card"><a href="3x3.html">
+                <img src="images/3x3.jpeg" class="custom" alt="">
+                <h2>3 x 3 standard</h2>
+            </a></div>
+            <div class="card"><a href="4x4.html">
+                <img src="images/4x4.jpg" class="custom" alt="">
+                <h2>4 x 4</h2>
+            </a></div>
+            <div class="card"><a href="custom.html">
+                <img src="images/custom.webp" class="custom" alt="">
+                <h2>n x m custom tic-tac-toe</h2>
+            </a></div>
+            <div class="card"><a href="stack.html">
+                <img src="images/stack.jpg" class="custom" alt="">
+                <h2>n x m stack tic-tac-toe</h2>
+            </a></div>
+            <div class="card"><a href="flip.html">
+                <img src="images/flip.jpg" class="custom" alt="">
+                <h2>8 x 6 flip game</h2>
+            </a></div>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+</body>
+</html>

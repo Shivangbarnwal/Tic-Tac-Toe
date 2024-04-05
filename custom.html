@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-image: url("background.jpg");
+            background-position: center;
+            background-repeat:repeat-y;
+            background-size: cover;
+        }
+        header{
+            background-color: black;
+            margin: 0;
+            color: white;
+        }
+        nav{
+            display: flex;
+            justify-content: space-between;
+            background-color: rgb(78, 78, 78);
+        }
+        .rules{
+            background-color: red;
+            color: white;
+            height: 30px;
+            width: 70px;
+            border-radius: 12px;
+        }
+        header h1{
+            text-align: center;
+        }
+        main {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        #box{
+            display: flex;
+            justify-content: space-evenly;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: rgb(255, 255, 255);
+            width: 50vw;
+        }
+        .set{
+            color: darkorange;
+            width: 30vw;
+            margin: 20vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 40vh;
+            background-color: rgb(255, 255, 255);
+        }
+        
+        .container {
+            background-color: rgb(255, 255, 255);
+        }
+        .boardbox{
+            
+            display: flex;
+            justify-content: center;
+        }
+        
+
+        .board {
+            display: grid;
+            grid-gap: 5px;
+            margin: 20px 20px;
+        }
+
+        .cell {
+            width: 70px;
+            height: 70px;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .cell:hover {
+            background-color: #ddd;
+        }
+        .stat{
+            text-align: center;
+            margin: 20px;
+        }
+        .status {
+            color: #333;
+            font-size: 18px;
+            margin: 10px;
+        }
+        .reset{
+            display: flex;
+            justify-content: center;
+        }
+        .reset-btn {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            background-color: #2980b9;
+        }
+        .hidden{
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tic - Tac - Toe</h1>
+        <nav>
+            <a href="index.html">
+                <img src="back.svg" alt="" height="40px">
+            </a>
+        </nav>
+    </header>
+    <main>
+        <div id="box">
+            <div class="set" id="set">
+                <div class="height">
+                    Enter height
+                    <input type="number" id="m" placeholder="Enter height" min="1" max="10" step="1">
+                </div>
+                <div class="width">
+                    Enter width
+                    <input type="number" id="n" placeholder="Enter width" min="1" max="10" step="1">
+                </div>
+                <div class="winnum">
+                    Enter number of blocks to win
+                    <input type="number" id="k" placeholder="Enter number">
+                </div>
+                <button id="start" onclick="start()">Start</button>
+                
+                
+            </div>
+            <div class="boardbox">
+                <div class="container hidden" id="cont">
+                    <div id="board" class="board">
+                    </div>
+                    <div class="stat">
+                        <p id="status" class="status"></p>
+                    </div>
+                    
+                    <div class="reset hidden" id="reset">
+                        <button id="resetBtn" class="reset-btn">Reset Game</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+    <script>
+        let m,n,k;
+        let gameBoard=[];
+        let gameActive=true;
+        let currentPlayer='X';
+        const status = document.getElementById('status');
+        const resetBtn = document.getElementById('resetBtn');
+        function start(){
+            m=parseInt(document.getElementById("m").value);
+            n=parseInt(document.getElementById("n").value);
+            k=parseInt(document.getElementById("k").value);
+            
+            
+            if (k<=m && k<=n && m<11 && n<11 && k>1 && n>1 && m>1) {          
+                initializeBoard();
+                renderBoard();
+                const set=document.getElementById("set");
+                set.remove()
+                const cont=document.getElementById("cont");
+                cont.classList.remove("hidden");
+                const box=document.getElementById("box");
+                box.style.width=`min(${calc((n*100)+50)}px,100vw)`;
+                
+            }
+            else{
+                alert("Please enter valid winning number");
+            }
+        }
+        function initializeBoard() {
+            gameBoard = Array.from({ length: m }, () => Array.from({ length: n }, () => ''));
+            const view=document.getElementById("reset");
+            view.classList.add("hidden");
+        }
+        
+        
+        function renderBoard(){
+            const board = document.getElementById("board");
+            board.innerHTML = '';
+            const columnWidth = "70px";
+            board.style.setProperty("grid-template-columns", `repeat(${n}, ${columnWidth})`);
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
+                    const cell = document.createElement("div");
+                    cell.classList.add("cell");
+                    cell.dataset.height = i;
+                    cell.dataset.width = j;
+                    cell.addEventListener('click', () => handleCellClick(i, j));
+                    board.appendChild(cell);
+                }
+            }
+            status.textContent = `Current Player: ${currentPlayer}`;
+
+            
+        }
+        function handleCellClick(height,width) {
+            if (!gameActive || gameBoard[height][width] !=='') return;
+            gameBoard[height][width] = currentPlayer;
+            renderCell(height,width,currentPlayer);
+            
+            const winner = checkWinner();
+
+            if (winner) {
+                endGame(winner);
+                const cell = document.querySelector(`.cell[data-height='${height}'][data-width='${width}']`);
+                cell.style.backgroundColor='green';
+                const view=document.getElementById("reset");
+                view.classList.remove("hidden");
+            }
+            else if (isBoardFull()) {
+                endGame('T');
+                const view=document.getElementById("reset");
+                view.classList.remove("hidden");
+            }
+            else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                status.textContent = `Current Player: ${currentPlayer}`;
+            }
+        }
+
+        function renderCell(height, width, player) {
+            const cell = document.querySelector(`.cell[data-height='${height}'][data-width='${width}']`);
+            cell.textContent = player;
+            cell.style.backgroundColor = player === 'X' ? 'pink' : 'cyan';
+        }
+        function checkWinner() {
+            // Check rows
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j <= n - k; j++) {
+                    const symbol = gameBoard[i][j];
+                    if (symbol === '') continue;
+                    
+                    let count = 1;
+                    for (let l = 1; l < k; l++) {
+                        if (gameBoard[i][j + l] === symbol) count++;
+                        else break;
+                    }
+                    
+                    if (count === k) return symbol;
+                }
+            }
+            
+            // Check columns
+            for (let i = 0; i <= m - k; i++) {
+                for (let j = 0; j < n; j++) {
+                    const symbol = gameBoard[i][j];
+                    if (symbol === '') continue;
+                    
+                    let count = 1;
+                    for (let l = 1; l < k; l++) {
+                        if (gameBoard[i + l][j] === symbol) count++;
+                        else break;
+                    }
+                    
+                    if (count === k) return symbol;
+                }
+            }
+            
+            // Check diagonals
+            for (let i = 0; i <= m - k; i++) {
+                for (let j = 0; j <= n - k; j++) {
+                    const symbol = gameBoard[i][j];
+                    if (symbol === '') continue;
+                    
+                    let count = 1;
+                    for (let l = 1; l < k; l++) {
+                        if (gameBoard[i + l][j + l] === symbol) count++;
+                        else break;
+                    }
+                    
+                    if (count === k) return symbol;
+                }
+            }
+            
+            // Check anti-diagonals
+            for (let i = k - 1; i < m; i++) {
+                for (let j = 0; j <= n - k; j++) {
+                    const symbol = gameBoard[i][j];
+                    if (symbol === '') continue;
+                    
+                    let count = 1;
+                    for (let l = 1; l < k; l++) {
+                        if (gameBoard[i - l][j + l] === symbol) count++;
+                        else break;
+                    }
+                    
+                    if (count === k) return symbol;
+                }
+            }
+            
+            return null;
+
+        }
+        function isBoardFull() {
+            return gameBoard.every(row => row.every(cell => cell !== ''));
+        }
+        
+        function endGame(winner) {
+            gameActive = false;
+            if (winner === 'T') {
+                status.textContent = 'It\'s a Tie!';
+            } else {
+                status.textContent = `${winner} is the winner!`;
+            }
+        }
+
+        resetBtn.addEventListener('click', () => {
+            gameActive = true;
+            currentPlayer = 'X';
+            status.textContent = `Current Player: ${currentPlayer}`;
+            initializeBoard();
+            renderBoard();
+        });        
+
+    </script>
+</body>
+</html>
